@@ -1,107 +1,101 @@
 package trikzon.snowvariants.events;
 
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.enums.BlockHalf;
+import net.minecraft.block.enums.SlabType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.Half;
-import net.minecraft.state.properties.SlabType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.*;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
 import trikzon.snowvariants.blocks.ModBlocks;
 import trikzon.snowvariants.blocks.SnowSlab;
 import trikzon.snowvariants.blocks.SnowStair;
 
-@Mod.EventBusSubscriber
 public class TransformationEvent {
 
-    @SubscribeEvent()
-    public static void onBlockRightClicked(PlayerInteractEvent.RightClickBlock event) {
-        boolean success = false;
-        BlockPos successPos = null;
+    static {
+        UseBlockCallback.EVENT.register((playerIn, world, hand, hitResult) -> {
+            if (!world.isClient) {
+                if (!(playerIn.getStackInHand(hand).isItemEqual(new ItemStack(Blocks.SNOW)))) return ActionResult.PASS;
 
-        World world = event.getWorld();
-        if (!(event.getEntity() instanceof PlayerEntity)) return;
-        PlayerEntity playerIn = event.getEntityPlayer();
+                if (hitResult == null) return ActionResult.PASS;
+                if (hitResult.getType() != BlockHitResult.Type.BLOCK) return ActionResult.PASS;
 
-        if (!world.isRemote) {
-            if (!(playerIn.getHeldItem(event.getHand()).isItemEqual(new ItemStack(Blocks.SNOW)))) return;
+                BlockPos blockPos = hitResult.getBlockPos();
+                BlockState blockStateAtPos = world.getBlockState(blockPos);
+                Block blockAtPos = blockStateAtPos.getBlock();
 
-            RayTraceResult rayTraceResult = rayTrace(world, playerIn);
-            if (rayTraceResult == null) return;
-            if (rayTraceResult.getType() != RayTraceResult.Type.BLOCK) return;
-//            if (!getDirectionFromVector(rayTraceResult.getHitVec()).equals(Direction.UP)) return;
+                if (blockAtPos instanceof StairsBlock) {
+                    for (SnowStair block : ModBlocks.SNOWY_STAIRS) {
+                        if (blockAtPos.equals(block.origin)) {
+                            if (blockStateAtPos.get(Properties.BLOCK_HALF).equals(BlockHalf.BOTTOM)) {
+                                world.setBlockState(blockPos, block.getDefaultState()
+                                        .with(Properties.HORIZONTAL_FACING, blockStateAtPos.get(Properties.HORIZONTAL_FACING))
+                                        .with(Properties.BLOCK_HALF, blockStateAtPos.get(Properties.BLOCK_HALF))
+                                        .with(Properties.STAIR_SHAPE, blockStateAtPos.get(Properties.STAIR_SHAPE)));
 
-            BlockPos blockPos = new BlockPos(rayTraceResult.getHitVec());
-            BlockState blockStateAtPos = world.getBlockState(blockPos);
-            Block blockAtPos = blockStateAtPos.getBlock();
+                                if (!playerIn.isCreative())
+                                    playerIn.getStackInHand(hand).decrement(1);
 
-            if (blockAtPos instanceof StairsBlock) {
-                for (SnowStair block : ModBlocks.SNOW_STAIRS) {
-                    if (blockAtPos.equals(block.origin)) {
-                        if (blockStateAtPos.get(BlockStateProperties.HALF).equals(Half.BOTTOM)) {
-                            world.setBlockState(blockPos, block.getDefaultState()
-                            .with(BlockStateProperties.HORIZONTAL_FACING, blockStateAtPos.get(BlockStateProperties.HORIZONTAL_FACING))
-                            .with(BlockStateProperties.HALF, blockStateAtPos.get(BlockStateProperties.HALF))
-                            .with(BlockStateProperties.STAIRS_SHAPE, blockStateAtPos.get(BlockStateProperties.STAIRS_SHAPE)));
-
-                            if (!playerIn.isCreative())
-                                playerIn.getHeldItem(event.getHand()).shrink(1);
-
-                            successPos = blockPos;
-                            playerIn.playSound(SoundEvents.BLOCK_SNOW_PLACE, (SoundType.SNOW.getVolume() + 1.0f) / 2.0f, SoundType.SNOW.getPitch() * 0.8f);
-//                            world.playSound(playerIn, blockPos, SoundType.SNOW.getPlaceSound(), SoundCategory.BLOCKS, (SoundType.SNOW.getVolume() + 1.0f) / 2.0f, SoundType.SNOW.getPitch() * 0.8f);
-                            success = true;
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            if (blockAtPos instanceof SlabBlock) {
-                for (SnowSlab block : ModBlocks.SNOW_SLABS) {
-                    if (blockAtPos.equals(block.origin)) {
-                        if (blockStateAtPos.get(BlockStateProperties.SLAB_TYPE).equals(SlabType.BOTTOM)) {
-                            world.setBlockState(blockPos, block.getDefaultState());
-
-                            if (!playerIn.isCreative())
-                                playerIn.getHeldItem(event.getHand()).shrink(1);
-
-                            successPos = blockPos;
-                            world.playSound(playerIn, blockPos, SoundType.SNOW.getPlaceSound(), SoundCategory.BLOCKS, (SoundType.SNOW.getVolume() + 1.0f) / 2.0f, SoundType.SNOW.getPitch() * 0.8f);
-                            success = true;
+                                playerIn.playSound(SoundEvents.BLOCK_SNOW_PLACE, (BlockSoundGroup.SNOW.getVolume() + 1.0f) / 2.0f, BlockSoundGroup.SNOW.getPitch() * 0.8f);
+                            }
+                            break;
                         }
                     }
                 }
+
+                if (blockAtPos instanceof SlabBlock) {
+                    for (SnowSlab block : ModBlocks.SNOWY_SLABS) {
+                        if (blockAtPos.equals(block.origin)) {
+                            if (blockStateAtPos.get(Properties.SLAB_TYPE).equals(SlabType.BOTTOM)) {
+                                world.setBlockState(blockPos, block.getDefaultState());
+
+                                if (!playerIn.isCreative())
+                                    playerIn.getStackInHand(hand).decrement(1);
+
+                                world.playSound(playerIn, blockPos, BlockSoundGroup.SNOW.getPlaceSound(), SoundCategory.BLOCKS, (BlockSoundGroup.SNOW.getVolume() + 1.0f) / 2.0f, BlockSoundGroup.SNOW.getPitch() * 0.8f);
+                            }
+                        }
+                    }
+                }
+
+                if (blockAtPos instanceof SlabBlock) {
+                    for (SnowSlab block : ModBlocks.SNOWY_SLABS) {
+                        if (blockAtPos.equals(block.origin)) {
+                            if (blockStateAtPos.get(Properties.SLAB_TYPE).equals(SlabType.BOTTOM)) {
+                                world.setBlockState(blockPos, block.getDefaultState());
+
+                                if (!playerIn.isCreative())
+                                    playerIn.getStackInHand(hand).decrement(1);
+
+                                world.playSound(playerIn, blockPos, BlockSoundGroup.SNOW.getPlaceSound(), SoundCategory.BLOCKS, (BlockSoundGroup.SNOW.getVolume() + 1.0f) / 2.0f, BlockSoundGroup.SNOW.getPitch() * 0.8f);
+                            }
+                        }
+                    }
+                }
+
+                if (blockAtPos instanceof SlabBlock) {
+                    for (SnowSlab block : ModBlocks.SNOWY_SLABS) {
+                        if (blockAtPos.equals(block.origin)) {
+                            if (blockStateAtPos.get(Properties.SLAB_TYPE).equals(SlabType.BOTTOM)) {
+                                world.setBlockState(blockPos, block.getDefaultState());
+
+                                if (!playerIn.isCreative())
+                                    playerIn.getStackInHand(hand).decrement(1);
+
+                                world.playSound(playerIn, blockPos, BlockSoundGroup.SNOW.getPlaceSound(), SoundCategory.BLOCKS, (BlockSoundGroup.SNOW.getVolume() + 1.0f) / 2.0f, BlockSoundGroup.SNOW.getPitch() * 0.8f);
+                            }
+                        }
+                    }
+                }
             }
-        }
-        if (world.isRemote && success) {
-            //TODO: It doesn't play a sound
-//            world.playSound(playerIn, successPos, SoundType.SNOW.getPlaceSound(), SoundCategory.BLOCKS, (SoundType.SNOW.getVolume() + 1.0f) / 2.0f, SoundType.SNOW.getPitch() * 0.8f);
-        }
-
+            return ActionResult.SUCCESS;
+        });
     }
 
-
-    public static RayTraceResult rayTrace (World worldIn, PlayerEntity player) {
-        float f = player.rotationPitch;
-        float f1 = player.rotationYaw;
-        Vec3d vec3d = player.getEyePosition(1.0F);
-        float f2 = MathHelper.cos(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
-        float f3 = MathHelper.sin(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
-        float f4 = -MathHelper.cos(-f * ((float)Math.PI / 180F));
-        float f5 = MathHelper.sin(-f * ((float)Math.PI / 180F));
-        float f6 = f3 * f4;
-        float f7 = f2 * f4;
-        double d0 = player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue();;
-        Vec3d vec3d1 = vec3d.add((double)f6 * d0, (double)f5 * d0, (double)f7 * d0);
-        return worldIn.rayTraceBlocks(new RayTraceContext(vec3d, vec3d1, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.ANY, player));
-    }
 }

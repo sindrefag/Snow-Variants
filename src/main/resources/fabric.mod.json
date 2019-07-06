@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "snowvariants",
+  "version": "${version}",
+
+  "name": "Snow Variants",
+  "description": "Snow Variants adds the ability to right click stairs and slabs with a snow layer to 'place' the layer on the stair or slab. To remove the layer, break the block and you will get the layer and the stair or slab back or right click the block with a shovel.",
+  "authors": [
+    "Trikzon"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/snow-variants",
+    "sources": "https://github.com/Trikzon/Snow-Variants",
+    "issues": "https://github.com/Trikzon/Snow-Variants/issues"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/snowvariants/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "trikzon.snowvariants.SnowVariants"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
+}

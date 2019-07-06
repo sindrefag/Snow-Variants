@@ -6,7 +6,7 @@ public class SnowStairTemplate {
 
     public SnowStairTemplate(String modid, String name, String all) {
         this.modid = modid;
-        this.name = modid + "_" + name;
+        this.name = "snowy_" + name;
         rawName = name;
         this.all = all;
         top = null;
@@ -18,7 +18,7 @@ public class SnowStairTemplate {
 
     public SnowStairTemplate(String modid, String name, String top, String side, String bottom) {
         this.modid = modid;
-        this.name = modid + "_" + name;
+        this.name = "snowy_" + name;
         rawName = name;
         all = null;
         this.top = top;
