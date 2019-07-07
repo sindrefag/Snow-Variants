@@ -83,70 +83,32 @@ public class Generator {
         new SnowSlabTemplate("minecraft", "polished_andesite_slab", "polished_andesite");
         new SnowSlabTemplate("minecraft", "diorite_slab", "diorite");
 
+        new SnowFenceTemplate("minecraft", "oak_fence", "oak_planks");
+        new SnowFenceTemplate("minecraft", "spruce_fence", "spruce_planks");
+        new SnowFenceTemplate("minecraft", "birch_fence", "birch_planks");
+        new SnowFenceTemplate("minecraft", "jungle_fence", "jungle_planks");
+        new SnowFenceTemplate("minecraft", "acacia_fence", "acacia_planks");
+        new SnowFenceTemplate("minecraft", "dark_oak_fence", "dark_oak_planks");
+
+        new SnowWallTemplate("minecraft", "cobblestone_wall", "cobblestone");
+        new SnowWallTemplate("minecraft", "mossy_cobblestone_wall", "mossy_cobblestone");
+        new SnowWallTemplate("minecraft", "brick_wall", "bricks");
+        new SnowWallTemplate("minecraft", "prismarine_wall", "prismarine");
+        new SnowWallTemplate("minecraft", "red_sandstone_wall", "red_sandstone");
+        new SnowWallTemplate("minecraft", "mossy_stone_brick_wall", "mossy_stone_bricks");
+        new SnowWallTemplate("minecraft", "granite_wall", "granite");
+        new SnowWallTemplate("minecraft", "stone_brick_wall", "stone_bricks");
+        new SnowWallTemplate("minecraft", "nether_brick_wall", "nether_bricks");
+        new SnowWallTemplate("minecraft", "andesite_wall", "andesite");
+        new SnowWallTemplate("minecraft", "red_nether_brick_wall", "red_nether_bricks");
+        new SnowWallTemplate("minecraft", "sandstone_wall", "sandstone");
+        new SnowWallTemplate("minecraft", "end_stone_brick_wall", "end_stone_bricks");
+        new SnowWallTemplate("minecraft", "diorite_wall", "diorite");
+
         for (SnowStairTemplate temp : STAIRS) {
             /**Blockstate*/
             try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/blockstates/" + temp.name + ".json")) {
                 file.write(stairBlockState(temp.name));
-                file.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            /**Block Model*/
-            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/block/" + temp.name + ".json")) {
-                file.write(stairBlockModel(temp));
-                file.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            /**Inner Block Model*/
-            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/block/" + temp.name + "_inner" + ".json")) {
-                file.write(stairInnerBlockModel(temp));
-                file.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            /**Outer Block Model*/
-            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/block/" + temp.name + "_outer" + ".json")) {
-                file.write(stairOuterBlockModel(temp));
-                file.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            /**Item Model*/
-            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/item/" + temp.name + ".json")) {
-                file.write(blockItemModel(temp.name));
-                file.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            /**Recipe*/
-            try (FileWriter file = new FileWriter("src/main/resources/data/snowvariants/recipes/" + temp.name + ".json")) {
-                file.write(recipe(temp));
-                file.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            /**Loot Table*/
-            try (FileWriter file = new FileWriter("src/main/resources/data/snowvariants/loot_tables/blocks/" + temp.name + ".json")) {
-                file.write(lootTable(temp));
-                file.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println("Generated files for " + temp.name);
-        }
-
-        for (SnowFenceTemplate temp : FENCES) {
-            /**Blockstate*/
-            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/blockstates/" + temp.name + ".json")) {
-                file.write(fenceBlockState(temp.name));
                 file.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -248,57 +210,114 @@ public class Generator {
             System.out.println("Generated files for " + temp.name);
         }
 
+        for (SnowFenceTemplate temp : FENCES) {
+            /**Blockstate*/
+            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/blockstates/" + temp.name + ".json")) {
+                file.write(fenceBlockState(temp.name));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Side Block Model*/
+            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/block/" + temp.name + "_side.json")) {
+                file.write(fenceSideModel(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Post Block Model*/
+            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/block/" + temp.name + "_post.json")) {
+                file.write(fencePostModel(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Item Model*/
+            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/item/" + temp.name + ".json")) {
+                file.write(fenceItemModel(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Recipe*/
+            try (FileWriter file = new FileWriter("src/main/resources/data/snowvariants/recipes/" + temp.name + ".json")) {
+                file.write(recipe(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Loot Table*/
+            try (FileWriter file = new FileWriter("src/main/resources/data/snowvariants/loot_tables/blocks/" + temp.name + ".json")) {
+                file.write(lootTable(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("Generated files for " + temp.name);
+        }
+
+        for (SnowWallTemplate temp : WALLS) {
+
+            /**BlockState*/
+            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/blockstates/" + temp.name + ".json")) {
+                file.write(wallBlockState(temp.name));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Wall Side Block Model*/
+            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/block/" + temp.name + "_side.json")) {
+                file.write(wallSideModel(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Wall Post Block Model*/
+            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/block/" + temp.name + "_post.json")) {
+                file.write(wallPostModel(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Item Model*/
+            try (FileWriter file = new FileWriter("src/main/resources/assets/snowvariants/models/item/" + temp.name + ".json")) {
+                file.write(wallInventoryModel(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Recipe*/
+            try (FileWriter file = new FileWriter("src/main/resources/data/snowvariants/recipes/" + temp.name + ".json")) {
+                file.write(recipe(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /**Loot Table*/
+            try (FileWriter file = new FileWriter("src/main/resources/data/snowvariants/loot_tables/blocks/" + temp.name + ".json")) {
+                file.write(lootTable(temp));
+                file.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("Generated files for " + temp.name);
+        }
+
     }
 
     private static String stairBlockState (String name) {
-        String out = "{\n" +
-                "  \"variants\": {\n" +
-                "    \"facing=east,half=bottom,shape=straight\":  { \"model\": \"" + MODID + ":block/" + name + "\" },\n" +
-                "    \"facing=west,half=bottom,shape=straight\":  { \"model\": \"" + MODID + ":block/" + name + "\", \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=south,half=bottom,shape=straight\": { \"model\": \"" + MODID + ":block/" + name + "\", \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=north,half=bottom,shape=straight\": { \"model\": \"" + MODID + ":block/" + name + "\", \"y\": 270, \"uvlock\": true },\n" +
-                "    \"facing=east,half=bottom,shape=outer_right\":  { \"model\": \"" + MODID + ":block/" + name + "_outer\" },\n" +
-                "    \"facing=west,half=bottom,shape=outer_right\":  { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=south,half=bottom,shape=outer_right\": { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=north,half=bottom,shape=outer_right\": { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"y\": 270, \"uvlock\": true },\n" +
-                "    \"facing=east,half=bottom,shape=outer_left\":  { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"y\": 270, \"uvlock\": true },\n" +
-                "    \"facing=west,half=bottom,shape=outer_left\":  { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=south,half=bottom,shape=outer_left\": { \"model\": \"" + MODID + ":block/" + name + "_outer\" },\n" +
-                "    \"facing=north,half=bottom,shape=outer_left\": { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=east,half=bottom,shape=inner_right\":  { \"model\": \"" + MODID + ":block/" + name + "_inner\" },\n" +
-                "    \"facing=west,half=bottom,shape=inner_right\":  { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=south,half=bottom,shape=inner_right\": { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=north,half=bottom,shape=inner_right\": { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"y\": 270, \"uvlock\": true },\n" +
-                "    \"facing=east,half=bottom,shape=inner_left\":  { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"y\": 270, \"uvlock\": true },\n" +
-                "    \"facing=west,half=bottom,shape=inner_left\":  { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=south,half=bottom,shape=inner_left\": { \"model\": \"" + MODID + ":block/" + name + "_inner\" },\n" +
-                "    \"facing=north,half=bottom,shape=inner_left\": { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=east,half=top,shape=straight\":  { \"model\": \"" + MODID + ":block/" + name + "\", \"x\": 180, \"uvlock\": true },\n" +
-                "    \"facing=west,half=top,shape=straight\":  { \"model\": \"" + MODID + ":block/" + name + "\", \"x\": 180, \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=south,half=top,shape=straight\": { \"model\": \"" + MODID + ":block/" + name + "\", \"x\": 180, \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=north,half=top,shape=straight\": { \"model\": \"" + MODID + ":block/" + name + "\", \"x\": 180, \"y\": 270, \"uvlock\": true },\n" +
-                "    \"facing=east,half=top,shape=outer_right\":  { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"x\": 180, \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=west,half=top,shape=outer_right\":  { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"x\": 180, \"y\": 270, \"uvlock\": true },\n" +
-                "    \"facing=south,half=top,shape=outer_right\": { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"x\": 180, \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=north,half=top,shape=outer_right\": { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"x\": 180, \"uvlock\": true },\n" +
-                "    \"facing=east,half=top,shape=outer_left\":  { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"x\": 180, \"uvlock\": true },\n" +
-                "    \"facing=west,half=top,shape=outer_left\":  { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"x\": 180, \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=south,half=top,shape=outer_left\": { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"x\": 180, \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=north,half=top,shape=outer_left\": { \"model\": \"" + MODID + ":block/" + name + "_outer\", \"x\": 180, \"y\": 270, \"uvlock\": true },\n" +
-                "    \"facing=east,half=top,shape=inner_right\":  { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"x\": 180, \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=west,half=top,shape=inner_right\":  { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"x\": 180, \"y\": 270, \"uvlock\": true },\n" +
-                "    \"facing=south,half=top,shape=inner_right\": { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"x\": 180, \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=north,half=top,shape=inner_right\": { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"x\": 180, \"uvlock\": true },\n" +
-                "    \"facing=east,half=top,shape=inner_left\":  { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"x\": 180, \"uvlock\": true },\n" +
-                "    \"facing=west,half=top,shape=inner_left\":  { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"x\": 180, \"y\": 180, \"uvlock\": true },\n" +
-                "    \"facing=south,half=top,shape=inner_left\": { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"x\": 180, \"y\": 90, \"uvlock\": true },\n" +
-                "    \"facing=north,half=top,shape=inner_left\": { \"model\": \"" + MODID + ":block/" + name + "_inner\", \"x\": 180, \"y\": 270, \"uvlock\": true }\n" +
-                "  }\n" +
-                "}";
-        return out;
-    }
-
-    private static String fenceBlockState (String name) {
         return "{\n" +
                 "  \"variants\": {\n" +
                 "    \"facing=east,half=bottom,shape=straight\":  { \"model\": \"" + MODID + ":block/" + name + "\" },\n" +
@@ -435,6 +454,126 @@ public class Generator {
                 "}";
     }
 
+    private static String fenceBlockState (String name) {
+        return "{\n" +
+                "    \"multipart\": [\n" +
+                "        {   \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_post\" }},\n" +
+                "        {   \"when\": { \"north\": \"true\" },\n" +
+                "            \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_side\", \"uvlock\": true }\n" +
+                "        },\n" +
+                "        {   \"when\": { \"east\": \"true\" },\n" +
+                "            \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_side\", \"y\": 90, \"uvlock\": true }\n" +
+                "        },\n" +
+                "        {   \"when\": { \"south\": \"true\" },\n" +
+                "            \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_side\", \"y\": 180, \"uvlock\": true }\n" +
+                "        },\n" +
+                "        {   \"when\": { \"west\": \"true\" },\n" +
+                "            \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_side\", \"y\": 270, \"uvlock\": true }\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}\n";
+    }
+
+    public static String fencePostModel(SnowFenceTemplate temp) {
+        String texture = temp.all;
+
+        return "{\n" +
+                "  \"parent\": \"snowvariants:block/snowy_fence_post\",\n" +
+                "  \"textures\": {\n" +
+                "    \"texture\": \"" + temp.modid + ":block/" + texture + "\",\n" +
+                "    \"snowTop\": \"minecraft:block/snow\",\n" +
+                "    \"snowSide\": \"snowvariants:block/snow_side\"\n" +
+                "  }\n" +
+                "}";
+    }
+
+    public static String fenceSideModel(SnowFenceTemplate temp) {
+        String texture = temp.all;
+
+        return "{\n" +
+                "  \"parent\": \"snowvariants:block/snowy_fence_side\",\n" +
+                "  \"textures\": {\n" +
+                "    \"texture\": \"" + temp.modid + ":block/" + texture + "\",\n" +
+                "    \"snowTop\": \"minecraft:block/snow\",\n" +
+                "    \"snowSide\": \"snowvariants:block/snow_side\"\n" +
+                "  }\n" +
+                "}";
+    }
+
+    public static String fenceItemModel(SnowFenceTemplate temp) {
+        String texture = temp.all;
+
+        return "{\n" +
+                "  \"parent\": \"snowvariants:block/snowy_fence_inventory\"\n" +
+                "  \"textures\": {\n" +
+                "    \"texture\": \"" + temp.modid + ":block/" + texture + "\",\n" +
+                "    \"snowTop\": \"minecraft:block/snow\",\n" +
+                "    \"snowSide\": \"snowvariants:block/snow_side\"\n" +
+                "  }\n" +
+                "}";
+    }
+
+    public static String wallBlockState (String name) {
+        return "{\n" +
+                "    \"multipart\": [\n" +
+                "        {   \"when\": { \"up\": \"true\" },\n" +
+                "            \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_post\" }\n" +
+                "        },\n" +
+                "        {   \"when\": { \"north\": \"true\" },\n" +
+                "            \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_side\", \"uvlock\": true }\n" +
+                "        },\n" +
+                "        {   \"when\": { \"east\": \"true\" },\n" +
+                "            \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_side\", \"y\": 90, \"uvlock\": true }\n" +
+                "        },\n" +
+                "        {   \"when\": { \"south\": \"true\" },\n" +
+                "            \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_side\", \"y\": 180, \"uvlock\": true }\n" +
+                "        },\n" +
+                "        {   \"when\": { \"west\": \"true\" },\n" +
+                "            \"apply\": { \"model\": \"" + MODID + ":block/" + name + "_side\", \"y\": 270, \"uvlock\": true }\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}\n";
+    }
+
+    public static String wallPostModel(SnowWallTemplate temp) {
+        String texture = temp.all;
+
+        return "{\n" +
+                "  \"parent\": \"snowvariants:block/snowy_wall_post\",\n" +
+                "  \"textures\": {\n" +
+                "    \"wall\": \"" + temp.modid + ":block/" + texture + "\",\n" +
+                "    \"snowTop\": \"minecraft:block/snow\",\n" +
+                "    \"snowSide\": \"snowvariants:block/snow_side\"\n" +
+                "  }\n" +
+                "}";
+    }
+
+    public static String wallSideModel(SnowWallTemplate temp) {
+        String texture = temp.all;
+
+        return "{\n" +
+                "  \"parent\": \"snowvariants:block/snowy_wall_side\",\n" +
+                "  \"textures\": {\n" +
+                "    \"wall\": \"" + temp.modid + ":block/" + texture + "\",\n" +
+                "    \"snowTop\": \"minecraft:block/snow\",\n" +
+                "    \"snowSide\": \"snowvariants:block/snow_side\"\n" +
+                "  }\n" +
+                "}";
+    }
+
+    public static String wallInventoryModel(SnowWallTemplate temp) {
+        String texture = temp.all;
+
+        return "{\n" +
+                "  \"parent\": \"snowvariants:block/snowy_wall_inventory\",\n" +
+                "  \"textures\": {\n" +
+                "    \"wall\": \"" + temp.modid + ":block/" + texture + "\",\n" +
+                "    \"snowTop\": \"minecraft:block/snow\",\n" +
+                "    \"snowSide\": \"snowvariants:block/snow_side\"\n" +
+                "  }\n" +
+                "}";
+    }
+
     public static String recipe(SnowStairTemplate temp) {
         return "{\n" +
                 "  \"type\": \"crafting_shaped\",\n" +
@@ -481,8 +620,8 @@ public class Generator {
         return "{\n" +
                 "  \"type\": \"crafting_shaped\",\n" +
                 "  \"pattern\": [\n" +
-                "    \"A\",\n" +
-                "    \"B\"\n" +
+                "    \"ASA\",\n" +
+                "    \"BSB\"\n" +
                 "  ],\n" +
                 "  \"key\": {\n" +
                 "    \"A\": {\n" +
@@ -490,6 +629,9 @@ public class Generator {
                 "    },\n" +
                 "    \"B\": {\n" +
                 "      \"item\": \"" + temp.modid + ":" + temp.rawName + "\"\n" +
+                "    },\n" +
+                "    \"S\": {\n" +
+                "      \"item\": \"minecraft:stick\"\n" +
                 "    }\n" +
                 "  },\n" +
                 "  \"result\": {\n" +
@@ -502,8 +644,8 @@ public class Generator {
         return "{\n" +
                 "  \"type\": \"crafting_shaped\",\n" +
                 "  \"pattern\": [\n" +
-                "    \"A\",\n" +
-                "    \"B\"\n" +
+                "    \"AAA\",\n" +
+                "    \"BBB\"\n" +
                 "  ],\n" +
                 "  \"key\": {\n" +
                 "    \"A\": {\n" +

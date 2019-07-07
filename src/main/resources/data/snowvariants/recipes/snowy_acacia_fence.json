@@ -1,0 +1,21 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "ASA",
+    "BSB"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:snow"
+    },
+    "B": {
+      "item": "minecraft:acacia_fence"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "snowvariants:snowy_acacia_fence"
+  }
+}

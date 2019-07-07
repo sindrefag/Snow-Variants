@@ -1,0 +1,18 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "AAA",
+    "BBB"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:snow"
+    },
+    "B": {
+      "item": "minecraft:mossy_stone_brick_wall"
+    }
+  },
+  "result": {
+    "item": "snowvariants:snowy_mossy_stone_brick_wall"
+  }
+}

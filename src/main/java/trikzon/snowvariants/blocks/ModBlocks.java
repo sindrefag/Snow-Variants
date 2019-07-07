@@ -120,6 +120,17 @@ public class ModBlocks {
 
     private static void register(SnowFence block) {
         RegistryUtils.register(block, new Identifier(SnowVariants.MODID, String.format("snowy_%s", Registry.BLOCK.getId(block.getOrigin()).getPath())), SnowVariants.SNOWY_BLOCKS);
+        /*BlockTags.FENCES.entries().add(new Tag.Entry<>() {
+            @Override
+            public void build(Collection<Block> collection) {
+
+            }
+
+            @Override
+            public void toJson(JsonArray jsonArray, Function<Block, Identifier> function) {
+
+            }
+        });*/
     }
 
     private static void register(SnowWall block) {

@@ -1,0 +1,8 @@
+{
+  "parent": "snowvariants:block/snowy_wall_inventory",
+  "textures": {
+    "wall": "minecraft:block/mossy_stone_bricks",
+    "snowTop": "minecraft:block/snow",
+    "snowSide": "snowvariants:block/snow_side"
+  }
+}

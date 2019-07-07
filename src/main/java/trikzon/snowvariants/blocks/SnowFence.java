@@ -20,12 +20,14 @@ import net.minecraft.world.World;
 public class SnowFence extends FenceBlock {
 
     public final Block origin;
+    private final VoxelShape[] SHAPES;
 
     public SnowFence(Block block) {
         super(Settings.copy(block));
         ModBlocks.SNOWY_FENCES.add(this);
 
         origin = block;
+        this.SHAPES = this.createShapes(2.0F, 1.0F, 16.0F, 6.0F, 15.0F);
     }
 
     public Block getOrigin() {
@@ -39,7 +41,7 @@ public class SnowFence extends FenceBlock {
 
     @Override
     public VoxelShape getOutlineShape(BlockState blockState_1, BlockView blockView_1, BlockPos blockPos_1, EntityContext entityContext_1) {
-        return Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+        return this.SHAPES[this.getShapeIndex(blockState_1)];
     }
 
     @Override
